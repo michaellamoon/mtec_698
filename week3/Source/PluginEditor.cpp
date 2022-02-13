@@ -21,12 +21,12 @@ Week3AudioProcessorEditor::Week3AudioProcessorEditor (Week3AudioProcessor& p)
     
     mSlider.onValueChange = [this]() {
         audioProcessor.setSineVolume(mSlider.getValue());
-        
+    };
     //update value of slider
     mSlider.setValue(audioProcessor.getSineVolume());
-            
+    
+    
     setSize(400, 300);
-    };
 }
 
 Week3AudioProcessorEditor::~Week3AudioProcessorEditor()
