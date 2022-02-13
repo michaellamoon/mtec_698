@@ -1,0 +1,5 @@
+Week 3 Questions
+
+- correct way to add new .cpp/.h files? Add new file in Projucer and edit in Xcode? or add/write code in Xcode first then add existing file to Projucer?
+
+- difference between .h and .hpp? Why does it ask if you "also want to create header file" when making new .cpp file?
