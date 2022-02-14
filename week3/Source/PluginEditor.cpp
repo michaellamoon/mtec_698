@@ -20,10 +20,10 @@ Week3AudioProcessorEditor::Week3AudioProcessorEditor (Week3AudioProcessor& p)
     addAndMakeVisible(mSlider);
     
     mSlider.onValueChange = [this]() {
-        audioProcessor.setSineVolume(mSlider.getValue());
+        audioProcessor.setSineVolume(1, mSlider.getValue());
     };
     //update value of slider
-    mSlider.setValue(audioProcessor.getSineVolume());
+    mSlider.setValue(audioProcessor.getSineVolume(1));
     
     //-----SLIDER2-------------------
     m2Slider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
@@ -32,10 +32,10 @@ Week3AudioProcessorEditor::Week3AudioProcessorEditor (Week3AudioProcessor& p)
     addAndMakeVisible(m2Slider);
     
     m2Slider.onValueChange = [this]() {
-        audioProcessor.setSineVolume(m2Slider.getValue());
+        audioProcessor.setSineVolume(2, m2Slider.getValue());
     };
     //update value of slider
-    m2Slider.setValue(audioProcessor.getSineVolume());
+    m2Slider.setValue(audioProcessor.getSineVolume(2));
     
     
     setSize(400, 300);

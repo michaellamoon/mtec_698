@@ -95,7 +95,7 @@ void Week3AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     // Initialize our sine wave--------------------------------------
         mSineWave.initialize(442, sampleRate);
-        m2SineWave.initialize(200, sampleRate);
+        m2SineWave.initialize(600, sampleRate);
 }
 
 void Week3AudioProcessor::releaseResources()
@@ -150,7 +150,7 @@ void Week3AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
          
          // GET THE NEXT SAMPLE FROM OUR SINE GENERATOR
          float output = mSineWave.getNextSample();
-         float output2 =m2SineWave.getNextSample();
+         float output2 = m2SineWave.getNextSample();
          
          output *= mSineGain;
          output2 *= m2SineGain;
@@ -161,21 +161,22 @@ void Week3AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
          // void setSample (int destChannel, int destSample, Type newValue)
          
          buffer.setSample(left, sample_index, output);
-         
-         buffer.setSample(right, sample_index, output);
+         buffer.setSample(right, sample_index, output2);
          
      }
 }
-void Week3AudioProcessor::setSineVolume(float inInputVolumeAmp)
+void Week3AudioProcessor::setSineVolume(int inSineID, float inInputVolumeAmp)
 {
-    mSineGain = inInputVolumeAmp;
-    m2SineGain = inInputVolumeAmp;
+    if (inSineID == 1) { mSineGain = inInputVolumeAmp; }
+    if (inSineID == 2) { m2SineGain = inInputVolumeAmp; }
 }
 
-float Week3AudioProcessor::getSineVolume()
+float Week3AudioProcessor::getSineVolume(int inSineID)
 {
-    return mSineGain;
-    return m2SineGain;
+    if (inSineID == 1) { return mSineGain; }
+    if (inSineID == 2) { return m2SineGain; }
+
+    return -1;
 }
 
 //==============================================================================

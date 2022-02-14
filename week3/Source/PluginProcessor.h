@@ -23,8 +23,8 @@ public:
     //==============================================================================
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
-    void setSineVolume(float inInputVolumeAmp);
-    float getSineVolume();
+    void setSineVolume(int inSineID, float inInputVolumeAmp);
+    float getSineVolume(int inSineID);
 
     /* called before destruction to free data (rarely used with modern cpp) */
     void releaseResources() override;
