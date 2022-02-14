@@ -60,7 +60,10 @@ private:
     
     //-------INIT------------------------------
     SineWave mSineWave;
-    float mSineGain = 1.f;
+    float mSineGain = 0.2;
+    
+    SineWave m2SineWave;
+    float m2SineGain = 0.2;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Week3AudioProcessor)

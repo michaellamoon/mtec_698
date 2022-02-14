@@ -27,6 +27,7 @@ public:
 private:
     //CALL SLIDER INSTANCE--------------------
         juce::Slider mSlider;
+        juce::Slider m2Slider;
     
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
