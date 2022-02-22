@@ -166,6 +166,22 @@ void Week4AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
          buffer.setSample(1, sample_index, output);
          
      }
+    
+    //---------
+    m2SineWavePlug.setGain(mParameterValues[GAIN_AMOUNT]->load());
+    f2SineWavePlug.setGain(mParameterValues[FM_AMOUNT]->load());
+     
+     // FOR EACH SAMPLE IN THE INCOMING AUDIO BUFFER
+     for (int sample_index = 0; sample_index < buffer.getNumSamples(); sample_index++) {
+         
+         float fm_operator = f2SineWavePlug.getNextSample();
+         float output = m2SineWavePlug.getNextSampleWithFM(fm_operator);
+             
+         // STORE THE OUTPUT TO THE LEFT AND RIGHT CHANNELS OF THE AUDIO BUFFER
+         buffer.setSample(0, sample_index, output);
+         buffer.setSample(1, sample_index, output);
+         
+     }
     /*
     //---------
     m2SineWavePlug.setGain(mParameterValues[GAIN_AMOUNT2]->load());
