@@ -157,19 +157,30 @@ void Week4AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::
     
     m2SineWavePlug.setGain(mParameterValues[GAIN_AMOUNT2]->load());
     f2SineWavePlug.setGain(mParameterValues[FM_AMOUNT2]->load());
+    
+    switchButtons.setClickingTogglesState(mParameterValues[BUTT]->load());
      
      // FOR EACH SAMPLE IN THE INCOMING AUDIO BUFFER
      for (int sample_index = 0; sample_index < buffer.getNumSamples(); sample_index++) {
          
          float fm_operator = fSineWavePlug.getNextSample();
          float fm2_operator = f2SineWavePlug.getNextSample();
-         float output = mSineWavePlug.getNextSampleWithFM(fm_operator) * m2SineWavePlug.getNextSampleWithFM(fm2_operator);
          
+         if (switchButtons.isToggleable() == true){
+             float outputR = mSineWavePlug.getNextSampleWithFM(fm_operator);
+             float outputL = m2SineWavePlug.getNextSampleWithFM(fm2_operator);
              
-         // STORE THE OUTPUT TO THE LEFT AND RIGHT CHANNELS OF THE AUDIO BUFFER
-         buffer.setSample(0, sample_index, output);
-         buffer.setSample(1, sample_index, output);
-         
+             // STORE THE OUTPUT TO THE LEFT AND RIGHT CHANNELS OF THE AUDIO BUFFER
+             buffer.setSample(0, sample_index, outputR);
+             buffer.setSample(1, sample_index, outputL);
+         }
+         else {
+             float output = mSineWavePlug.getNextSampleWithFM(fm_operator) * m2SineWavePlug.getNextSampleWithFM(fm2_operator);
+             
+             // STORE THE OUTPUT TO THE LEFT AND RIGHT CHANNELS OF THE AUDIO BUFFER
+             buffer.setSample(0, sample_index, output);
+             buffer.setSample(1, sample_index, output);
+         }
      }
     
 }

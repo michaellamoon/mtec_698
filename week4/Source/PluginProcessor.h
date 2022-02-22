@@ -64,6 +64,8 @@ private:
     SineWave m2SineWavePlug;
     SineWave f2SineWavePlug;
     
+    juce::ToggleButton switchButtons;
+    
     /* this will be our "parameter tree" */
     std::unique_ptr<juce::AudioProcessorValueTreeState> mParameterState;
     /*guarantees thread safe read and write access*/

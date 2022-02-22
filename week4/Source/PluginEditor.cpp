@@ -35,6 +35,7 @@ Week4AudioProcessorEditor::Week4AudioProcessorEditor (Week4AudioProcessor& p)
     
     
     //-----SLIDER2-------------------
+    //vol
     m2Slider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     m2Slider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 20);
     m2Slider.setRange(0.f, 1.f);
@@ -52,6 +53,15 @@ Week4AudioProcessorEditor::Week4AudioProcessorEditor (Week4AudioProcessor& p)
     f2SliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment
                             (audioProcessor.getValueTreeState(),PARAMETER_NAMES[FM_AMOUNT2], f2Slider));
     
+    
+    //-----STERO/MONO SWITCH BUTTON-------------------
+    switchButton.setButtonText("stereo output switch");
+    //switchButton.changeWidthToFitText();
+    switchButton.setClickingTogglesState(true);
+    addAndMakeVisible(switchButton);
+    
+    switchButtonAttachment.reset(new juce::AudioProcessorValueTreeState::ButtonAttachment
+                            (audioProcessor.getValueTreeState(),PARAMETER_NAMES[BUTT], switchButton));
     
     setSize(400, 300);
 }
@@ -79,9 +89,11 @@ void Week4AudioProcessorEditor::resized()
 {
     getLookAndFeel().setColour (juce::Slider::thumbColourId, juce::Colours::lightsalmon);
     // silder1 position---------------
-    mSlider.setBounds(0, 0, 150, 150);
+    mSlider.setBounds(0, 3, 130, 130);
     fSlider.setBounds(0, 170, 150, 100);
     // silder2 position---------------
-    m2Slider.setBounds(250, 0, 150, 150);
+    m2Slider.setBounds(250, 3, 130, 130);
     f2Slider.setBounds(250, 170, 150, 100);
+    // button position---------------
+    switchButton.setBounds(120, -50, 150, 150);
 }

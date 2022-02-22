@@ -16,8 +16,8 @@ enum {
     GAIN_AMOUNT2,
     FM_AMOUNT,
     FM_AMOUNT2,
-    TotalNumberParameters,
-    inSineID
+    BUTT,
+    TotalNumberParameters
 };
 
 static const juce::StringArray PARAMETER_NAMES {
@@ -25,6 +25,7 @@ static const juce::StringArray PARAMETER_NAMES {
     "FM Amount",
     "Gain2 Amount",
     "FM2 Amount"
+    "Stero/mono switch"
 };
 
 static const juce::Array<juce::NormalisableRange<float>> PARAMETER_RANGES {
