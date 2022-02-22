@@ -95,5 +95,5 @@ void Week4AudioProcessorEditor::resized()
     m2Slider.setBounds(250, 3, 130, 130);
     f2Slider.setBounds(250, 170, 150, 100);
     // button position---------------
-    switchButton.setBounds(120, -50, 150, 150);
+    switchButton.setBounds(120, 0, 150, 50);
 }
