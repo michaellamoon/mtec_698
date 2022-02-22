@@ -13,9 +13,9 @@
 //Param defines
 enum {
     GAIN_AMOUNT,
-    //GAIN_AMOUNT2,
+    GAIN_AMOUNT2,
     FM_AMOUNT,
-    //FM_AMOUNT2,
+    FM_AMOUNT2,
     TotalNumberParameters,
     inSineID
 };
@@ -23,12 +23,16 @@ enum {
 static const juce::StringArray PARAMETER_NAMES {
     "Gain Amount",
     "FM Amount",
+    "Gain2 Amount",
+    "FM2 Amount"
 };
 
 static const juce::Array<juce::NormalisableRange<float>> PARAMETER_RANGES {
     //                            (start value, end value, interval, skew/curve)
     juce::NormalisableRange<float>(0.f, 1.f, 0.f, 1.f),
     juce::NormalisableRange<float>(0.f, 1.f, 0.f, 1.f),
+    juce::NormalisableRange<float>(0.f, 1.f, 0.f, 1.f),
+    juce::NormalisableRange<float>(0.f, 1.f, 0.f, 1.f)
 };
 
 #endif /* ParameterDefines_h */

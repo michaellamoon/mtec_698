@@ -41,8 +41,7 @@ Week4AudioProcessorEditor::Week4AudioProcessorEditor (Week4AudioProcessor& p)
     addAndMakeVisible(m2Slider);
     
     m2SliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment
-                            (audioProcessor.getValueTreeState(),PARAMETER_NAMES[GAIN_AMOUNT], m2Slider));
-                            //(audioProcessor.getValueTreeState(),PARAMETER_NAMES[GAIN_AMOUNT2], m2Slider));
+                            (audioProcessor.getValueTreeState(),PARAMETER_NAMES[GAIN_AMOUNT2], m2Slider));
     
     //freq
     f2Slider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
@@ -51,8 +50,7 @@ Week4AudioProcessorEditor::Week4AudioProcessorEditor (Week4AudioProcessor& p)
     addAndMakeVisible(f2Slider);
     
     f2SliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment
-                            (audioProcessor.getValueTreeState(),PARAMETER_NAMES[FM_AMOUNT], f2Slider));
-                           //(audioProcessor.getValueTreeState(),PARAMETER_NAMES[FM_AMOUNT2], f2Slider));
+                            (audioProcessor.getValueTreeState(),PARAMETER_NAMES[FM_AMOUNT2], f2Slider));
     
     
     setSize(400, 300);
