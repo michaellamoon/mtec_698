@@ -1,13 +1,93 @@
 //
-//  SampleBase.hpp
-//  week7 - Shared Code
+//  SampleBase.h
+//  GrainSynth - Shared Code
 //
-//  Created by michaella on 3/13/22.
+//  Created by Jacob Penn on 7/6/21.
+//  Copyright © 2021 Minimal Audio. All rights reserved.
 //
 
-#ifndef SampleBase_hpp
-#define SampleBase_hpp
+#ifndef SampleBase_h
+#define SampleBase_h
 
-#include <stdio.h>
+#include "JuceHeader.h"
 
-#endif /* SampleBase_hpp */
+class SampleBase
+{
+public:
+    
+    /* */
+    SampleBase();
+    
+    /* */
+    virtual ~SampleBase();
+    
+    //=================
+    // === Virtuals ===
+    //=================
+
+    /* Initialize how you want to handle the sample here */
+    virtual void readerInitialized() = 0;
+    
+    /* Returns the samples at this position here */
+    virtual void getSample(juce::int64 inPosition, std::vector<float>& inResults) = 0;
+    virtual void getSample(juce::int64 inPositionLeft, juce::int64 inPositionRight, std::vector<float>& inResults) = 0;
+    
+    //=======================
+    // === Base Functions ===
+    //=======================
+    
+    /* */
+    bool loadFile(juce::File inFile);
+    
+    /* */
+    juce::File getLoadedFile();
+    
+    /* */
+    bool isFileLoaded();
+    
+    /* */
+    int getLengthInSamples();
+    
+    /* */
+    float getSampleRate();
+    
+    /* */
+    int getNumChannels();
+    
+    /* */
+    juce::AudioFormatManager* getFormantManager();
+    
+    /* */
+    juce::AudioFormatReader* getFileReader();
+    
+    //========================
+    // === Reading Samples ===
+    //========================
+    
+    /* */
+    void getLinearInterpolatedSample(float inFloatSample,
+                                     std::vector<float>& inResults,
+                                     bool inWrapPhases);
+    
+private:
+    
+    juce::File mFile;
+        
+    bool mFileLoaded;
+    int mNumChannels;
+    float mSampleRate;
+    int mLengthInSamples;
+    
+    juce::AudioFormatManager mFormatManager;
+    std::unique_ptr<juce::AudioFormatReader> mFileReader;
+    
+    /* Interpolation Samples */
+    std::vector<float> mZ1Results;
+    std::vector<float> mXResults;
+    std::vector<float> mX1Results;
+    std::vector<float> mX2Results;
+    
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(SampleBase)
+};
+
+#endif /* SampleBase_h */

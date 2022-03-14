@@ -12,6 +12,16 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="FHYVC3" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <FILE id="CLoV69" name="Delay.cpp" compile="1" resource="0" file="Source/Delay.cpp"/>
+    <FILE id="fZonrF" name="Delay.h" compile="0" resource="0" file="Source/Delay.h"/>
+    <FILE id="TxNbv3" name="ParameterDefines.h" compile="0" resource="0"
+          file="Source/ParameterDefines.h"/>
+    <FILE id="C3NJVg" name="ParameterManager.cpp" compile="1" resource="0"
+          file="Source/ParameterManager.cpp"/>
+    <FILE id="cE3aUt" name="ParameterManager.h" compile="0" resource="0"
+          file="Source/ParameterManager.h"/>
+    <FILE id="SaA6NK" name="SineWave.cpp" compile="1" resource="0" file="Source/SineWave.cpp"/>
+    <FILE id="xXNhBH" name="SineWave.h" compile="0" resource="0" file="Source/SineWave.h"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

@@ -1,13 +1,42 @@
 //
-//  InMemorySample.hpp
-//  week7 - Shared Code
+//  InMemorySample.h
+//  GrainSynth - Shared Code
 //
-//  Created by michaella on 3/13/22.
+//  Created by Jacob Penn on 7/6/21.
+//  Copyright © 2021 Minimal Audio. All rights reserved.
 //
 
-#ifndef InMemorySample_hpp
-#define InMemorySample_hpp
+#ifndef InMemorySample_h
+#define InMemorySample_h
 
-#include <stdio.h>
+#include "SampleBase.h"
 
-#endif /* InMemorySample_hpp */
+class InMemorySample : public SampleBase
+{
+public:
+    
+    /* */
+    InMemorySample();
+    
+    /* */
+    ~InMemorySample();
+    
+    /* */
+    void readerInitialized() override;
+    
+    /* */
+    void getSample(juce::int64 inPosition, std::vector<float>& inResults) override;
+    
+    /* */
+    void getSample(juce::int64 inPositionLeft, juce::int64 inPositionRight, std::vector<float>& inResults) override;
+    
+    /* */
+    juce::AudioBuffer<float>* getBuffer();
+    
+private:
+    
+    std::unique_ptr<juce::AudioBuffer<float>> mInMemoryBuffer;
+
+};
+
+#endif /* InMemorySample_h */
