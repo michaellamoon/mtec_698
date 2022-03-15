@@ -7,10 +7,10 @@
 
   ==============================================================================
 */
-
+#pragma once
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "UI/MyLookAndFeel.h"
+#include "MyLookAndFeel.h"
 
 //==============================================================================
 /**

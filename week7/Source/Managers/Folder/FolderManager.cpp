@@ -17,18 +17,18 @@ FolderManager::~FolderManager()
     
 }
 
-File FolderManager::getRootFolder()
+juce::File FolderManager::getRootFolder()
 {
-    auto osType = SystemStats::getOperatingSystemType();
-    File folder;
+    auto osType = juce::SystemStats::getOperatingSystemType();
+    juce::File folder;
     
-    if ((osType & SystemStats::MacOSX) != 0) {
+    if ((osType & juce::SystemStats::MacOSX) != 0) {
         
-        folder = File("/Library/Application Support/MTEC_PLUGS/");
+        folder = juce::File("/Library/Application Support/MTEC_PLUGS/");
         
-    } else if ((osType & SystemStats::Windows) != 0) {
+    } else if ((osType & juce::SystemStats::Windows) != 0) {
         
-        folder = File::getSpecialLocation(File::commonApplicationDataDirectory).getChildFile("MTEC_PLUGS");
+        folder = juce::File::getSpecialLocation(juce::File::commonApplicationDataDirectory).getChildFile("MTEC_PLUGS");
         
     }
     
@@ -41,9 +41,9 @@ File FolderManager::getRootFolder()
     return folder;
 }
 
-File FolderManager::getAppFolder()
+juce::File FolderManager::getAppFolder()
 {
-    File productAppFolder = getRootFolder().getChildFile(JucePlugin_Name);
+    juce::File productAppFolder = getRootFolder().getChildFile(JucePlugin_Name);
     
     if (!productAppFolder.exists()) {
         DBG("Created Product Folder " + productAppFolder.createDirectory().getErrorMessage());
@@ -52,9 +52,9 @@ File FolderManager::getAppFolder()
     return productAppFolder;
 }
 
-File FolderManager::getPresetsFolder()
+juce::File FolderManager::getPresetsFolder()
 {
-    File presetsFolder = getAppFolder().getChildFile("Presets");
+    juce::File presetsFolder = getAppFolder().getChildFile("Presets");
     
     if (!presetsFolder.exists()) {
         DBG("Created Preset Folder " + presetsFolder.createDirectory().getErrorMessage());

@@ -4,7 +4,7 @@
 //
 //  Created by michaella on 3/13/22.
 //
-
+#pragma once
 #ifndef PropertyManager_h
 #define PropertyManager_h
 
@@ -20,6 +20,9 @@ public:
 
     /* */
     ~PropertyManager();
+    
+private:
+    ProcessorInterface* mProcessorInterface;
 };
 
 #endif /* PresetManager_h */

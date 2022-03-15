@@ -4,7 +4,7 @@
 //
 //  Created by Jacob Penn on 3/8/22.
 //
-
+#pragma once
 #ifndef PresetManager_h
 #define PresetManager_h
 

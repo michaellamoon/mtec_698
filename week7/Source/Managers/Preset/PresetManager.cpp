@@ -6,9 +6,9 @@
 //
 
 #include "PresetManager.h"
-#include "../Interfaces/ProcessorInterface.h"
-#include "../Folder/FolderManager.h"
-#include "../Parameter/ParameterManager.h"
+#include "ProcessorInterface.h"
+#include "FolderManager.h"
+#include "ParameterManager.h"
 
 /* */
 PresetManager::PresetManager(ProcessorInterface* inInterface)
@@ -30,14 +30,14 @@ void PresetManager::loadPreset(int inListIndex)
 {
     auto file_to_load = mPresetFiles[inListIndex];
     
-    std::unique_ptr<XmlElement> preset_xml(parseXML(file_to_load));
+    std::unique_ptr<juce::XmlElement> preset_xml(parseXML(file_to_load));
         
     juce::ValueTree parameter_tree = juce::ValueTree::fromXml(*preset_xml);
     mProcessorInterface->getParameterManager()->getValueTree()->replaceState(parameter_tree);
 }
 
 /* */
-void PresetManager::saveCurrentPreset(String inPresetName)
+void PresetManager::saveCurrentPreset(juce::String inPresetName)
 {
     // Get the underlying ValueTree from out "Parameter Value Tree"
     auto tree_state = mProcessorInterface->getParameterManager()->getValueTree()->copyState();

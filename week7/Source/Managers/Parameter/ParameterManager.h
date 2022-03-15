@@ -4,7 +4,7 @@
 //
 //  Created by Jacob Penn on 2/22/22.
 //
-
+#pragma once
 #ifndef ParameterManager_h
 #define ParameterManager_h
 

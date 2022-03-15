@@ -5,7 +5,7 @@
 //  Created by Jacob Penn on 7/6/21.
 //  Copyright © 2021 Minimal Audio. All rights reserved.
 //
-
+#pragma once
 #ifndef SampleBase_h
 #define SampleBase_h
 

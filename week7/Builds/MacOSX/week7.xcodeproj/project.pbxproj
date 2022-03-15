@@ -895,7 +895,7 @@
 				OTHER_LDFLAGS = "-bundle -lweek7";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.week7;
 				PRODUCT_NAME = "week7";
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
 				WRAPPER_EXTENSION = vst3;
 			};
@@ -1012,7 +1012,7 @@
 				OTHER_REZFLAGS = "-d ppc_$ppc -d i386_$i386 -d ppc64_$ppc64 -d x86_64_$x86_64 -d arm64_$arm64 -I /System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Headers -I \"$(DEVELOPER_DIR)/Extras/CoreAudio/AudioUnits/AUPublic/AUBase\" -I \"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AudioUnit.framework/Headers\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.week7;
 				PRODUCT_NAME = "week7";
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
 				WRAPPER_EXTENSION = component;
 			};
@@ -1128,7 +1128,7 @@
 				OTHER_LDFLAGS = "-bundle -lweek7";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.week7;
 				PRODUCT_NAME = "week7";
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
 				WRAPPER_EXTENSION = vst3;
 			};
@@ -1238,7 +1238,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.week7;
 				PRODUCT_NAME = "week7";
 				SKIP_INSTALL = YES;
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
 			};
 			name = Debug;
@@ -1348,7 +1348,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.week7;
 				PRODUCT_NAME = "week7";
 				SKIP_INSTALL = YES;
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
 			};
 			name = Release;
@@ -1512,7 +1512,7 @@
 				OTHER_REZFLAGS = "-d ppc_$ppc -d i386_$i386 -d ppc64_$ppc64 -d x86_64_$x86_64 -d arm64_$arm64 -I /System/Library/Frameworks/CoreServices.framework/Frameworks/CarbonCore.framework/Versions/A/Headers -I \"$(DEVELOPER_DIR)/Extras/CoreAudio/AudioUnits/AUPublic/AUBase\" -I \"$(DEVELOPER_DIR)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/AudioUnit.framework/Headers\"";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.week7;
 				PRODUCT_NAME = "week7";
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
 				WRAPPER_EXTENSION = component;
 			};
@@ -1686,7 +1686,7 @@
 				OTHER_LDFLAGS = "-lweek7";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.week7;
 				PRODUCT_NAME = "week7";
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
 			};
 			name = Debug;
@@ -1796,7 +1796,7 @@
 				OTHER_LDFLAGS = "-lweek7";
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.week7;
 				PRODUCT_NAME = "week7";
-				USE_HEADERMAP = NO;
+				USE_HEADERMAP = YES;
 				VALID_ARCHS = "i386 x86_64 arm64 arm64e";
 			};
 			name = Release;

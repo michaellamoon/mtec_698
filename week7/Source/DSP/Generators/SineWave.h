@@ -4,7 +4,7 @@
 //
 //  Created by michaella on 2/13/22.
 //
-
+#pragma once
 #ifndef SineWave_h
 #define SineWave_h
 

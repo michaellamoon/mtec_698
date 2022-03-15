@@ -10,7 +10,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "Managers/Parameter/ParameterDefines.h"
+#include "ParameterDefines.h"
 #include "FolderManager.h"
 
 //==============================================================================

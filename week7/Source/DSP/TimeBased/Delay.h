@@ -4,7 +4,7 @@
 //
 //  Created by Jacob Penn on 2/22/22.
 //
-
+#pragma once
 #ifndef Delay_h
 #define Delay_h
 

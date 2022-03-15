@@ -7,16 +7,16 @@
 
   ==============================================================================
 */
-
+#pragma once
 #include <JuceHeader.h>
 
 // INCLUDE OUR SINEWAVE
-#include "DSP/Samples/InMemorySample.h"
-#include "DSP/TimeBased/Delay.h"
-#include "Managers/Parameter/ParameterManager.h"
-#include "Managers/Preset/PresetManager.h"
-#include "Managers/Property/PropertyManager.h"
-#include "Managers/Interfaces/ProcessorInterface.h"
+#include "InMemorySample.h"
+#include "Delay.h"
+#include "ParameterManager.h"
+#include "PresetManager.h"
+#include "PropertyManager.h"
+#include "ProcessorInterface.h"
 
 #define SIMPLE_SAMPLE_IN_STANDALONE 1
 
@@ -79,6 +79,7 @@ private:
     
     std::unique_ptr<ParameterManager> mParameterManager;
     std::unique_ptr<PresetManager> mPresetManager;
+    std::unique_ptr<PresetManager> mPropertyManager;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CoursePluginAudioProcessor)

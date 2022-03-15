@@ -7,10 +7,9 @@
 
 #include "PropertyManager.h"
 
-#include "../Preset/PresetManager.h"
-#include "../Interfaces/ProcessorInterface.h"
-#include "../Folder/FolderManager.h"
-#include "../Parameter/ParameterManager.h"
+#include "PresetManager.h"
+#include "ParameterManager.h"
+#include "ProcessorInterface.h"
 
 /* */
 PropertyManager::PropertyManager(ProcessorInterface* inInterface)

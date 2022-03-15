@@ -4,7 +4,7 @@
 //
 //  Created by Jacob Penn on 3/1/22.
 //
-
+#pragma once
 #ifndef AudioHelpers_h
 #define AudioHelpers_h
 

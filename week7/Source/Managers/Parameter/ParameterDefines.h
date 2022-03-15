@@ -4,7 +4,7 @@
 //
 //  Created by Jacob Penn on 2/15/22.
 //
-
+#pragma once
 #ifndef ParameterDefines_h
 #define ParameterDefines_h
 

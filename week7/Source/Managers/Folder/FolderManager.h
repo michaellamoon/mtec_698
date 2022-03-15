@@ -4,7 +4,7 @@
 //
 //  Created by Jacob Penn on 3/8/22.
 //
-
+#pragma once
 #ifndef MKUFolderManager_h
 #define MKUFolderManager_h
 
