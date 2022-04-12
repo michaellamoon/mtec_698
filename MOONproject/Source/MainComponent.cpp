@@ -3,20 +3,23 @@
 //==============================================================================
 MainComponent::MainComponent()
 {
-    // Make sure you set the size of the component after
-    // you add any child components.
-    setSize (800, 600);
-
-    // Specify the number of input and output channels that we want to open
     setAudioChannels (2, 2);
-     ///OSCPORT
+    
+     //OSC PORT-----
     if (! connect (9001))
     {
         std::cout << "Error: could not connect to UDP port 9001.";
     }
     addListener(this, "/juceOSC"); //OSC ADDRESS
     
-
+    //SLIDER-------
+    OSCdataSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    OSCdataSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 20);
+    OSCdataSlider.setRange(0.f, 4.f);
+    addAndMakeVisible(OSCdataSlider);
+    
+    
+    setSize (800, 600);
 }
 
 MainComponent::~MainComponent()
@@ -28,13 +31,9 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    // This function will be called when the audio device is started, or when
-    // its settings (i.e. sample rate, block size, etc) are changed.
-
-    // You can use this function to initialise any resources you might need,
-    // but be careful - it will be called on the audio thread, not the GUI thread.
-
-    // For more details, see the help for AudioProcessor::prepareToPlay()
+    // Initialize our sine wave--------------------------------------
+        mSineWave1.initialize(442, sampleRate);
+        mSineWave1FMOperator.initialize(442, sampleRate);
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
@@ -63,23 +62,29 @@ void MainComponent::oscMessageReceived(const juce::OSCMessage& message)
         int receivingData = message[0].getInt32();
         
         //PRINT TO CONSOLE
-        //DBG(receivingData);
-        std::cout << receivingData <<std::endl;
+            //DBG(receivingData);
+            //std::cout << receivingData <<std::endl;
+            //update value of slider
+        
+        OSCdataSlider.setValue(receivingData);
     }
-       
 }
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll (juce::Colours::lightgoldenrodyellow);
+    
+    g.setColour (juce::Colours::black);
+    g.setFont (15.0f);
+    g.drawSingleLineText ("OSC position data", OSCdataSlider.getX()+15, OSCdataSlider.getBottom()+12);
 
-    // You can add your drawing code here!
 }
 
 void MainComponent::resized()
 {
-    // This is called when the MainContentComponent is resized.
-    // If you add any child components, this is where you should
-    // update their positions.
+    // silder1 position---------------
+    getLookAndFeel().setColour (juce::Slider::thumbColourId, juce::Colours::lightsalmon);
+    getLookAndFeel().setColour (juce::Slider::backgroundColourId, juce::Colours::lightsalmon);
+    getLookAndFeel().setColour (juce::Slider::textBoxBackgroundColourId, juce::Colours::lightsalmon);
+    OSCdataSlider.setBounds(60, 60, 150, 150);
 }

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0537798F2D13973E032AB3AC /* include_juce_osc.cpp */ = {isa = PBXBuildFile; fileRef = 953641704B9D923F56044BB2; };
+		15FB6E22C051E32B4409DBCF /* SineWave.cpp */ = {isa = PBXBuildFile; fileRef = 7B4D1FAAF59B60D9EDD4A675; };
 		1601DF84866792E2915BB562 /* Accelerate.framework */ = {isa = PBXBuildFile; fileRef = 6C49954C85C47B02F2A49635; };
 		1B07F8032FD49A579EC8FFEB /* IOKit.framework */ = {isa = PBXBuildFile; fileRef = 597950F121DC6D73546AF1FE; };
 		2FE8707C82F5DF0340611D8A /* App */ = {isa = PBXBuildFile; fileRef = 46651896624D31A7081C42D7; };
@@ -52,10 +53,12 @@
 		5152AB068ABF9D33B9465FAD /* include_juce_graphics.mm */ /* include_juce_graphics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_graphics.mm; path = ../../JuceLibraryCode/include_juce_graphics.mm; sourceTree = SOURCE_ROOT; };
 		597950F121DC6D73546AF1FE /* IOKit.framework */ /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		5CDB386E08F0782E810917B2 /* RecentFilesMenuTemplate.nib */ /* RecentFilesMenuTemplate.nib */ = {isa = PBXFileReference; lastKnownFileType = file.nib; name = RecentFilesMenuTemplate.nib; path = RecentFilesMenuTemplate.nib; sourceTree = SOURCE_ROOT; };
+		5DF173849A7FEB8AF286D02E /* SineWave.h */ /* SineWave.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SineWave.h; path = ../../Source/SineWave.h; sourceTree = SOURCE_ROOT; };
 		666DEE408782B22ED62CF278 /* Main.cpp */ /* Main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Main.cpp; path = ../../Source/Main.cpp; sourceTree = SOURCE_ROOT; };
 		6C49954C85C47B02F2A49635 /* Accelerate.framework */ /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		764FD6FD0434BF61636F346D /* juce_audio_devices */ /* juce_audio_devices */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_devices; path = /Users/michaella/Documents/code/mtech_698/SDK/modules/juce_audio_devices; sourceTree = "<absolute>"; };
 		76C2C8DD3E21E77C59670041 /* juce_gui_basics */ /* juce_gui_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_basics; path = /Users/michaella/Documents/code/mtech_698/SDK/modules/juce_gui_basics; sourceTree = "<absolute>"; };
+		7B4D1FAAF59B60D9EDD4A675 /* SineWave.cpp */ /* SineWave.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SineWave.cpp; path = ../../Source/SineWave.cpp; sourceTree = SOURCE_ROOT; };
 		88523C71EB166F26C01D55F2 /* include_juce_gui_basics.mm */ /* include_juce_gui_basics.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_gui_basics.mm; path = ../../JuceLibraryCode/include_juce_gui_basics.mm; sourceTree = SOURCE_ROOT; };
 		90C76400EA163F03A15DEE59 /* juce_gui_extra */ /* juce_gui_extra */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_extra; path = /Users/michaella/Documents/code/mtech_698/SDK/modules/juce_gui_extra; sourceTree = "<absolute>"; };
 		953641704B9D923F56044BB2 /* include_juce_osc.cpp */ /* include_juce_osc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_osc.cpp; path = ../../JuceLibraryCode/include_juce_osc.cpp; sourceTree = SOURCE_ROOT; };
@@ -106,6 +109,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0E1E5EC36154F9B4515B36AE /* dsp */ = {
+			isa = PBXGroup;
+			children = (
+				7B4D1FAAF59B60D9EDD4A675,
+				5DF173849A7FEB8AF286D02E,
+			);
+			name = dsp;
+			sourceTree = "<group>";
+		};
 		21AED4F08D4F5787FE476391 /* MOONproject */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +197,7 @@
 		CB0EF4FAEA1EAB8CF786CAA1 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				0E1E5EC36154F9B4515B36AE,
 				666DEE408782B22ED62CF278,
 				C90FC7B6779584F5D3366118,
 				B491EF63C2650572E34FDD10,
@@ -297,6 +310,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				15FB6E22C051E32B4409DBCF,
 				BCB5153137C5E895C46B4C24,
 				E03FBE5E5EE262E03E23DE69,
 				B16E8F74E6F43478763691F0,

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "SineWave.h"
 
 //==============================================================================
 /*
@@ -26,13 +27,16 @@ public:
 
     void oscMessageReceived (const juce::OSCMessage& message) override;
     //==============================================================================
-    void paint (juce::Graphics& g) override;
     void resized() override;
-    
-    
+    void paint (juce::Graphics& g) override;
+
 private:
     //==============================================================================
-    // Your private member variables go here...
+    //CALL SLIDER INSTANCE--------------------
+        juce::Slider OSCdataSlider;
+    //-------INIT------------------------------
+    SineWave mSineWave1;
+    SineWave mSineWave1FMOperator;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
