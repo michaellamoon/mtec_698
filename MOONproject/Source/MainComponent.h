@@ -8,8 +8,8 @@
     your controls and content.
 */
 class MainComponent  : public juce::AudioAppComponent,
-                        public juce::OSCReceiver,
-                        public juce::OSCReceiver::ListenerWithOSCAddress
+                        private juce::OSCReceiver,
+                        private juce::OSCReceiver::ListenerWithOSCAddress
                         <juce::OSCReceiver::MessageLoopCallback>
                     //inherit juce module "OSCReceiver"
                     //inherit abstract class, print on message thread (RealtimeCallback: print on own osc thread) -PURE VIRTUAL FUNCTION NEEDS OWN FUNCTION (in cpp)
@@ -24,10 +24,12 @@ public:
     void getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill) override;
     void releaseResources() override;
 
+    void oscMessageReceived (const juce::OSCMessage& message) override;
     //==============================================================================
     void paint (juce::Graphics& g) override;
     void resized() override;
-
+    
+    
 private:
     //==============================================================================
     // Your private member variables go here...

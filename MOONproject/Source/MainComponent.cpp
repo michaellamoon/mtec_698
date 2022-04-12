@@ -9,8 +9,11 @@ MainComponent::MainComponent()
 
     // Specify the number of input and output channels that we want to open
     setAudioChannels (2, 2);
-    
-    connect(6448);  //OSC PORT #
+     ///OSCPORT
+    if (! connect (9001))
+    {
+        std::cout << "Error: could not connect to UDP port 9001.";
+    }
     addListener(this, "/juceOSC"); //OSC ADDRESS
     
 
@@ -53,12 +56,15 @@ void MainComponent::releaseResources()
     // For more details, see the help for AudioProcessor::releaseResources()
 }
 /* PARSE OSC MESSAGE*/
-void MainComponent::oscMessageReceived(const juce::OSCMessage & message) override
+void MainComponent::oscMessageReceived(const juce::OSCMessage& message)
 {
     if(message.size() == 1 && message[0].isInt32())
     {
         int receivingData = message[0].getInt32();
-        std::cout << receivingData << std::end1;
+        
+        //PRINT TO CONSOLE
+        //DBG(receivingData);
+        std::cout << receivingData <<std::endl;
     }
        
 }
