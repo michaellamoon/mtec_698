@@ -1,8 +1,6 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "SineWave.h"
-
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
@@ -29,14 +27,16 @@ public:
     //==============================================================================
     void resized() override;
     void paint (juce::Graphics& g) override;
+    void updateAngleDelta();
 
 private:
     //==============================================================================
-    //CALL SLIDER INSTANCE--------------------
+    //-------OSC DATA INPUT SLIDER-----------------------------
         juce::Slider OSCdataSlider;
-    //-------INIT------------------------------
-    SineWave mSineWave1;
-    SineWave mSineWave1FMOperator;
+    //-------FREQ GENERATOR SLIDER------------------------------
+        juce::Slider frequencySlider;
+        double currentSampleRate = 0.0, currentAngle = 0.0, angleDelta = 0.0;
+
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)

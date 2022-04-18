@@ -3,8 +3,6 @@
 //==============================================================================
 MainComponent::MainComponent()
 {
-    setAudioChannels (2, 2);
-    
      //OSC PORT-----
     if (! connect (9001))
     {
@@ -12,79 +10,114 @@ MainComponent::MainComponent()
     }
     addListener(this, "/juceOSC"); //OSC ADDRESS
     
-    //SLIDER-------
+    //OSC SLIDER-------
     OSCdataSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     OSCdataSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 20);
     OSCdataSlider.setRange(0.f, 4.f);
     addAndMakeVisible(OSCdataSlider);
     
-    
+    setAudioChannels (2, 2);
     setSize (800, 600);
+    
+    //FREQ GEN-----
+    frequencySlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
+    frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 20);
+    frequencySlider.setRange (50.0, 5000.0);
+    frequencySlider.onValueChange = [this]
+    {
+        if (currentSampleRate > 0.0)
+            updateAngleDelta();
+    };
+    addAndMakeVisible (frequencySlider);
+    
+    //----
+    
 }
 
 MainComponent::~MainComponent()
 {
-    // This shuts down the audio device and clears the audio source.
     shutdownAudio();
 }
 
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    // Initialize our sine wave--------------------------------------
-        mSineWave1.initialize(442, sampleRate);
-        mSineWave1FMOperator.initialize(442, sampleRate);
+    currentSampleRate = sampleRate;
+    updateAngleDelta();
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    // Your audio-processing code goes here!
+    auto level = 0.125f;
+    auto* leftBuffer  = bufferToFill.buffer->getWritePointer (0, bufferToFill.startSample);
+    auto* rightBuffer = bufferToFill.buffer->getWritePointer (1, bufferToFill.startSample);
 
-    // For more details, see the help for AudioProcessor::getNextAudioBlock()
-
-    // Right now we are not producing any data, in which case we need to clear the buffer
-    // (to prevent the output of random noise)
-    bufferToFill.clearActiveBufferRegion();
+    for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
+    {
+        auto currentSample = (float) std::sin (currentAngle);
+        currentAngle += angleDelta;
+        leftBuffer[sample]  = currentSample * level;
+        rightBuffer[sample] = currentSample * level;
+    }
 }
 
-void MainComponent::releaseResources()
-{
-    // This will be called when the audio device stops, or when it is being
-    // restarted due to a setting change.
+void MainComponent::releaseResources(){}
 
-    // For more details, see the help for AudioProcessor::releaseResources()
-}
+
 /* PARSE OSC MESSAGE*/
 void MainComponent::oscMessageReceived(const juce::OSCMessage& message)
 {
-    if(message.size() == 1 && message[0].isInt32())
+    if(message.size() == 2 && message[0].isInt32())
     {
         int receivingData = message[0].getInt32();
+        int startingTunning = message[1].getInt32();
         
         //PRINT TO CONSOLE
             //DBG(receivingData);
             //std::cout << receivingData <<std::endl;
             //update value of slider
         
+        //---------------OSC INPUT CHANGES PARAMETERS------------------------
         OSCdataSlider.setValue(receivingData);
+        
+        if(receivingData == 1){frequencySlider.setValue(startingTunning + 83);} //m3 = 83 freq interval
+        if(receivingData == 2){frequencySlider.setValue(startingTunning + 114);} //M3 = 114
+        if(receivingData == 3){frequencySlider.setValue(startingTunning + 147);} //p4 = 147
+        if(receivingData == 4){frequencySlider.setValue(startingTunning + 219);} //p5 = 219
     }
+}
+/*FREQ GENERATOR*/
+void MainComponent::updateAngleDelta()
+{
+    auto cyclesPerSample = frequencySlider.getValue() / currentSampleRate;         //calculate number of cycles for each output sample
+    angleDelta = cyclesPerSample * 2.0 * juce::MathConstants<double>::pi;          //multipled by length of whole sine wave cycle (2pi radians)
 }
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g)
 {
-    g.fillAll (juce::Colours::lightgoldenrodyellow);
+    g.fillAll (juce::Colours::wheat);
     
-    g.setColour (juce::Colours::black);
-    g.setFont (15.0f);
+    g.setColour (juce::Colours::lightgoldenrodyellow);
+    g.setFont (13.0f);
     g.drawSingleLineText ("OSC position data", OSCdataSlider.getX()+15, OSCdataSlider.getBottom()+12);
+    g.drawSingleLineText ("freq/pitch", frequencySlider.getX()+15, frequencySlider.getBottom()+12);
 
 }
 
 void MainComponent::resized()
 {
-    // silder1 position---------------
-    getLookAndFeel().setColour (juce::Slider::thumbColourId, juce::Colours::lightsalmon);
-    getLookAndFeel().setColour (juce::Slider::backgroundColourId, juce::Colours::lightsalmon);
-    getLookAndFeel().setColour (juce::Slider::textBoxBackgroundColourId, juce::Colours::lightsalmon);
-    OSCdataSlider.setBounds(60, 60, 150, 150);
+    getLookAndFeel().setColour (juce::Slider::textBoxOutlineColourId, juce::Colours::transparentWhite);
+    
+    //osc slider position---------------
+    OSCdataSlider.setColour (juce::Slider::thumbColourId, juce::Colours::lightsalmon);
+    OSCdataSlider.setColour (juce::Slider::backgroundColourId, juce::Colours::lightsalmon);
+    OSCdataSlider.setColour (juce::Slider::textBoxTextColourId, juce::Colours::lightsalmon);
+    OSCdataSlider.setBounds (100, 20, 150, getHeight()-100);
+    
+    //freq slider position-------------------
+    frequencySlider.setColour (juce::Slider::thumbColourId, juce::Colours::black);
+    frequencySlider.setColour (juce::Slider::backgroundColourId, juce::Colours::black);
+    frequencySlider.setColour (juce::Slider::textBoxTextColourId, juce::Colours::black);
+    frequencySlider.setBounds(getWidth()-150, 20, 150, getHeight()-100);
+    
 }

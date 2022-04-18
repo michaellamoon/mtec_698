@@ -4,10 +4,6 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="cNdum1" name="MOONproject">
     <GROUP id="{1D9D4EC2-6CB1-240B-6F10-BB5C3CB85604}" name="Source">
-      <GROUP id="{BCAC9973-6545-FC7B-AE06-81890431372B}" name="dsp">
-        <FILE id="vqVGmv" name="SineWave.cpp" compile="1" resource="0" file="Source/SineWave.cpp"/>
-        <FILE id="GwRN0g" name="SineWave.h" compile="0" resource="0" file="Source/SineWave.h"/>
-      </GROUP>
       <FILE id="fCxKrz" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="fuY69V" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="ZKWJeE" name="MainComponent.cpp" compile="1" resource="0"
