@@ -3,6 +3,8 @@
 //==============================================================================
 MainComponent::MainComponent()
 {
+    background = juce::ImageCache::getFromMemory (BinaryData::bdg_png, BinaryData::bdg_pngSize);
+    
      //OSC PORT-----
     if (! connect (9001))
     {
@@ -12,12 +14,9 @@ MainComponent::MainComponent()
     
     //OSC SLIDER-------
     OSCdataSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    OSCdataSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 20);
+    OSCdataSlider.setTextBoxStyle(juce::Slider::NoTextBox, false, 150, 20);
     OSCdataSlider.setRange(0.f, 4.f);
     addAndMakeVisible(OSCdataSlider);
-    
-    setAudioChannels (2, 2);
-    setSize (800, 600);
     
     //FREQ GEN-----
     frequencySlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -30,8 +29,34 @@ MainComponent::MainComponent()
     };
     addAndMakeVisible (frequencySlider);
     
-    //----
+    //INTERVAL BUTTONS-----
+    addAndMakeVisible (M2Button);
+    M2Button.addListener(this);
     
+    addAndMakeVisible (m3Button);
+    m3Button.addListener(this);
+    addAndMakeVisible (M3Button);
+    M3Button.addListener(this);
+    
+    addAndMakeVisible (p4Button);
+    p4Button.addListener(this);
+    addAndMakeVisible (p5Button);
+    p5Button.addListener(this);
+    
+    addAndMakeVisible (M6Button);
+    M6Button.addListener(this);
+    addAndMakeVisible (M7Button);
+    M7Button.addListener(this);
+    
+    addAndMakeVisible (p8Button);
+    p8Button.addListener(this);
+    
+    //WAVEFORM VISUALISER-----
+    addAndMakeVisible(visualiser);
+    
+    //----
+    setAudioChannels (2, 2);
+    setSize (1000, 600);
 }
 
 MainComponent::~MainComponent()
@@ -44,11 +69,13 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
 {
     currentSampleRate = sampleRate;
     updateAngleDelta();
+    
+    visualiser.clear();
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    auto level = 0.125f;
+    auto level = 0.125f;  //volume
     auto* leftBuffer  = bufferToFill.buffer->getWritePointer (0, bufferToFill.startSample);
     auto* rightBuffer = bufferToFill.buffer->getWritePointer (1, bufferToFill.startSample);
 
@@ -59,6 +86,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
         leftBuffer[sample]  = currentSample * level;
         rightBuffer[sample] = currentSample * level;
     }
+    visualiser.pushBuffer(bufferToFill);
 }
 
 void MainComponent::releaseResources(){}
@@ -70,7 +98,7 @@ void MainComponent::oscMessageReceived(const juce::OSCMessage& message)
     if(message.size() == 2 && message[0].isInt32())
     {
         int receivingData = message[0].getInt32();
-        int startingTunning = message[1].getInt32();
+        mStartingTunning = message[1].getInt32(); //call variable in header file
         
         //PRINT TO CONSOLE
             //DBG(receivingData);
@@ -80,10 +108,12 @@ void MainComponent::oscMessageReceived(const juce::OSCMessage& message)
         //---------------OSC INPUT CHANGES PARAMETERS------------------------
         OSCdataSlider.setValue(receivingData);
         
-        if(receivingData == 1){frequencySlider.setValue(startingTunning + 83);} //m3 = 83 freq interval
-        if(receivingData == 2){frequencySlider.setValue(startingTunning + 114);} //M3 = 114
-        if(receivingData == 3){frequencySlider.setValue(startingTunning + 147);} //p4 = 147
-        if(receivingData == 4){frequencySlider.setValue(startingTunning + 219);} //p5 = 219
+//        if(receivingData == 0){frequencySlider.setValue(50);}
+//        if(receivingData == 1){frequencySlider.setValue(mStartingTunning + 83);} //m3 = 83 freq interval
+//        if(receivingData == 2){frequencySlider.setValue(mStartingTunning + 114);} //M3 = 114
+//        if(receivingData == 3){frequencySlider.setValue(mStartingTunning + 147);} //p4 = 147
+//        if(receivingData == 4){frequencySlider.setValue(mStartingTunning + 219);} //p5 = 219
+        
     }
 }
 /*FREQ GENERATOR*/
@@ -95,13 +125,12 @@ void MainComponent::updateAngleDelta()
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g)
 {
-    g.fillAll (juce::Colours::wheat);
+    //g.fillAll (juce::Colours::wheat);
+        g.drawImageAt (background, 0, 0);
     
     g.setColour (juce::Colours::lightgoldenrodyellow);
     g.setFont (13.0f);
     g.drawSingleLineText ("OSC position data", OSCdataSlider.getX()+15, OSCdataSlider.getBottom()+12);
-    g.drawSingleLineText ("freq/pitch", frequencySlider.getX()+15, frequencySlider.getBottom()+12);
-
 }
 
 void MainComponent::resized()
@@ -109,15 +138,46 @@ void MainComponent::resized()
     getLookAndFeel().setColour (juce::Slider::textBoxOutlineColourId, juce::Colours::transparentWhite);
     
     //osc slider position---------------
-    OSCdataSlider.setColour (juce::Slider::thumbColourId, juce::Colours::lightsalmon);
-    OSCdataSlider.setColour (juce::Slider::backgroundColourId, juce::Colours::lightsalmon);
+    OSCdataSlider.setColour (juce::Slider::thumbColourId, juce::Colours::darkred);
+    OSCdataSlider.setColour (juce::Slider::backgroundColourId, juce::Colours::darkred);
     OSCdataSlider.setColour (juce::Slider::textBoxTextColourId, juce::Colours::lightsalmon);
-    OSCdataSlider.setBounds (100, 20, 150, getHeight()-100);
+    OSCdataSlider.setBounds (268, 195, 10, 249);
+    
+    
     
     //freq slider position-------------------
     frequencySlider.setColour (juce::Slider::thumbColourId, juce::Colours::black);
     frequencySlider.setColour (juce::Slider::backgroundColourId, juce::Colours::black);
     frequencySlider.setColour (juce::Slider::textBoxTextColourId, juce::Colours::black);
-    frequencySlider.setBounds(getWidth()-150, 20, 150, getHeight()-100);
+    frequencySlider.setBounds(745, 181, 8, 325);
+    
+
+    //interval button position-------------------
+    M2Button.setColour (juce::TextButton::buttonColourId, juce::Colours::transparentWhite);
+    m3Button.setColour (juce::TextButton::buttonColourId, juce::Colours::transparentWhite);
+    M3Button.setColour (juce::TextButton::buttonColourId, juce::Colours::transparentWhite);
+    p4Button.setColour (juce::TextButton::buttonColourId, juce::Colours::transparentWhite);
+    p5Button.setColour (juce::TextButton::buttonColourId, juce::Colours::transparentWhite);
+    M6Button.setColour (juce::TextButton::buttonColourId, juce::Colours::transparentWhite);
+    M7Button.setColour (juce::TextButton::buttonColourId, juce::Colours::transparentWhite);
+    p8Button.setColour (juce::TextButton::buttonColourId, juce::Colours::transparentWhite);
+    
+    M2Button.setBounds(754+2,184+1,29,32);
+    
+    m3Button.setBounds(754+2,222+1,29,32);
+    M3Button.setBounds(754+2,262+1,29,32);
+    
+    p4Button.setBounds(754+2,300+1,29,32);
+    p5Button.setBounds(754+2,335+1,29,32);
+    
+    M6Button.setBounds(754+2,375+1,29,32);
+    M7Button.setBounds(754+2,414+1,29,32);
+    
+    p8Button.setBounds(754+2,454+1,29,32);
+    
+    //visualiser position-------------------
+    visualiser.setColours(juce::Colour (255, 246, 223), juce::Colours::red); //background, waveform
+    //visualiser.setTransform(const juce::AffineTransform::rotation (1.5708).translated);
+    visualiser.setBounds(557, 150, 31, 370);
     
 }
