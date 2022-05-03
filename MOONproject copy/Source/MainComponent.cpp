@@ -3,6 +3,25 @@
 //==============================================================================
 MainComponent::MainComponent()
 {
+    /* declare a vector of parameters */
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> parameters;
+
+    /* loop through our parameter defines and add the parameters to the vector */
+    for (int i = 0; i < TotalNumberParameters; i++) {
+        parameters.push_back(std::make_unique<juce::AudioParameterFloat>(PARAMETER_NAMES[i], PARAMETER_NAMES[i], PARAMETER_RANGES[i], 1.f));
+    }
+
+    /* construct the parameter tree object -- this will actually add all the parameters to our plugin */
+    mParameterState.reset(new juce::AudioProcessorValueTreeState(*this, nullptr, "PARAMETER_STATE", { parameters.begin(), parameters.end() }));
+
+    /* now lets get pointers which point to the current values of the parameters, we can use these in our processing loops */
+    for (int i = 0; i < TotalNumberParameters; i++) {
+        mParameterValues[i] = mParameterState->getRawParameterValue(PARAMETER_NAMES[i]);
+        
+        
+        
+        
+    
     background = juce::ImageCache::getFromMemory (BinaryData::bdg_png, BinaryData::bdg_pngSize);
     
      //OSC PORT-----
@@ -19,26 +38,26 @@ MainComponent::MainComponent()
     addAndMakeVisible(OSCdataSlider);
     
     //FREQ GEN-----
-    frequencySlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    frequencySlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 20);
-    frequencySlider.setRange (50.0, 5000.0);
-    frequencySlider.onValueChange = [this]
-    {
-        if (currentSampleRate > 0.0)
-            updateAngleDelta();
-    };
-    addAndMakeVisible (frequencySlider);
-    
-    //FM-----
-    fmSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
-    fmSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 20);
-    fmSlider.setRange (50.0, 5000.0);
-    fmSlider.onValueChange = [this]
-    {
-        if (currentSampleRate2 > 0.0)
-            updateAngleDelta2();
-    };
-    addAndMakeVisible (fmSlider);
+        //-----SLIDER1-------------------
+        //vol
+        mSlider.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
+        mSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 20);
+        mSlider.setRange(0.f, 1.f);
+        addAndMakeVisible(mSlider);
+        
+        mSliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment
+                                (audioProcessor.getValueTreeState(),PARAMETER_NAMES[GAIN_AMOUNT], mSlider));
+        
+        //freq
+        fSlider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
+        fSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 150, 20);
+        fSlider.setRange(0.f, 1.f);
+        addAndMakeVisible(fSlider);
+        
+        fSliderAttachment.reset(new juce::AudioProcessorValueTreeState::SliderAttachment
+                                (audioProcessor.getValueTreeState(),PARAMETER_NAMES[FM_AMOUNT], fSlider));
+        
+        
     
     //INTERVAL BUTTONS-----
     addAndMakeVisible (M2Button);
@@ -76,35 +95,83 @@ MainComponent::~MainComponent()
 }
 
 //==============================================================================
-void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
+void MainComponent::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    currentSampleRate = sampleRate;
-    updateAngleDelta();
-    updateAngleDelta2();
+    mSineWavePlug.initialize(442, sampleRate);
+    fSineWavePlug.initialize(442, sampleRate);
     
     visualiser.clear();
 }
 
-void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
-{
-    auto level = 0.125f;  //volume
-    auto* leftBuffer  = bufferToFill.buffer->getWritePointer (0, bufferToFill.startSample);
-    auto* rightBuffer = bufferToFill.buffer->getWritePointer (1, bufferToFill.startSample);
-
-    for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
+void MainComponent::getNextAudioBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
     {
-        auto currentSample = (float) std::sin (currentAngle);
-        auto currentSample2 = (float) std::sin (currentAngle2);
-        currentAngle += angleDelta;
-        currentAngle += angleDelta2;
-        leftBuffer[sample]  = currentSample * level;
-        rightBuffer[sample] = currentSample2 * level;
-    }
-    visualiser.pushBuffer(bufferToFill);
+        juce::ScopedNoDenormals noDenormals;
+        auto totalNumInputChannels  = getTotalNumInputChannels();
+        auto totalNumOutputChannels = getTotalNumOutputChannels();
+
+        
+        for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
+             buffer.clear (i, 0, buffer.getNumSamples());
+        
+        //---------
+        mSineWavePlug.setGain(mParameterValues[GAIN_AMOUNT]->load());
+        fSineWavePlug.setGain(mParameterValues[FM_AMOUNT]->load());
+        
+         
+         // FOR EACH SAMPLE IN THE INCOMING AUDIO BUFFER
+         for (int sample_index = 0; sample_index < buffer.getNumSamples(); sample_index++) {
+             
+             float fm_operator = fSineWavePlug.getNextSample();
+             
+             float output = mSineWavePlug.getNextSampleWithFM(fm_operator);
+                 
+                 // STORE THE OUTPUT TO THE LEFT AND RIGHT CHANNELS OF THE AUDIO BUFFER
+                 buffer.setSample(0, sample_index, output);
+                 buffer.setSample(1, sample_index, output);
+             }
+         }
+        
+    visualiser.pushBuffer(buffer);
 }
 
 void MainComponent::releaseResources(){}
 
+    //==============================================================================
+    juce::AudioProcessorValueTreeState& Week4AudioProcessor::getValueTreeState()
+    {
+        return *mParameterState.get();
+    }
+    
+    void Week4AudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+    {
+        // Get the underlying ValueTree from out "Parameter Value Tree"
+        auto tree_state = mParameterState->copyState();
+        
+        // Convert the value tree into an XML object which can be saved on disk to as binary
+        std::unique_ptr<juce::XmlElement> xml(tree_state.createXml());
+        
+        /* */
+        DBG(xml->toString());
+
+        /* store as binary */
+        copyXmlToBinary(*xml, destData);
+    }
+
+    void Week4AudioProcessor::setStateInformation (const void* data, int sizeInBytes)
+    {
+        std::unique_ptr<juce::XmlElement> xmlState(getXmlFromBinary(data, sizeInBytes));
+
+        if (xmlState.get()) {
+            
+            DBG(xmlState->toString());
+            
+            juce::ValueTree parameter_tree = juce::ValueTree::fromXml(*xmlState);
+            mParameterState->replaceState(parameter_tree);
+        }
+    }
+    
+    
+    
 
 /* PARSE OSC MESSAGE*/
 void MainComponent::oscMessageReceived(const juce::OSCMessage& message)
@@ -166,12 +233,8 @@ void MainComponent::resized()
     
     
     //freq slider position-------------------
-    frequencySlider.setColour (juce::Slider::thumbColourId, juce::Colours::black);
-    frequencySlider.setColour (juce::Slider::backgroundColourId, juce::Colours::black);
-    frequencySlider.setColour (juce::Slider::textBoxTextColourId, juce::Colours::black);
-    frequencySlider.setBounds(745, 181, 8, 325);
-    
-    fmSlider.setBounds(900, 181, 8, 325);
+    mSlider.setBounds(0, 3, 130, 130);
+    fSlider.setBounds(0, 170, 150, 100);
 
     //interval button position-------------------
     M2Button.setColour (juce::TextButton::buttonColourId, juce::Colours::transparentWhite);

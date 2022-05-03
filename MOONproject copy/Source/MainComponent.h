@@ -1,6 +1,9 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "SineWave.h"
+#include "ParameterDefines.h"
+
 class Visualiser : public juce::AudioVisualiserComponent
 {
 public:
@@ -31,6 +34,11 @@ public:
     //==============================================================================
     void prepareToPlay (int samplesPerBlockExpected, double sampleRate) override;
     void getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill) override;
+    
+    void getStateInformation (juce::MemoryBlock& destData);       //DAW CALL PLUGIN STATE
+    void setStateInformation (const void* data, int sizeInBytes); //DAW SETS CURRENT STATE
+    juce::AudioProcessorValueTreeState& getValueTreeState();               //RETURN VALUE TREE STATE TO DAW
+    
     void releaseResources() override;
 
     void oscMessageReceived (const juce::OSCMessage& message) override;
@@ -45,35 +53,35 @@ public:
            //---------------BUTTONS CHANGES PARAMETERS------------------------
            if (button == &M2Button)
            {
-               frequencySlider.setValue(mStartingTunning + 32.03);
+               fSlider.setValue(mStartingTunning + 32.03);
            }
            if (button == &m3Button)
            {
-               frequencySlider.setValue(mStartingTunning + 49.5);
+               fSlider.setValue(mStartingTunning + 49.5);
            }
            if (button == &M3Button)
            {
-               frequencySlider.setValue(mStartingTunning + 68);
+               fSlider.setValue(mStartingTunning + 68);
            }
            if (button == &p4Button)
            {
-               frequencySlider.setValue(mStartingTunning + 87.6);
+               fSlider.setValue(mStartingTunning + 87.6);
            }
            if (button == &p5Button)
            {
-               frequencySlider.setValue(mStartingTunning + 130.37);
+               fSlider.setValue(mStartingTunning + 130.37);
            }
            if (button == &M6Button)
            {
-               frequencySlider.setValue(mStartingTunning + 178.37);
+               fSlider.setValue(mStartingTunning + 178.37);
            }
            if (button == &M7Button)
            {
-               frequencySlider.setValue(mStartingTunning + 232.25);
+               fSlider.setValue(mStartingTunning + 232.25);
            }
            if (button == &p8Button)
            {
-               frequencySlider.setValue(mStartingTunning + 261.62);
+               fSlider.setValue(mStartingTunning + 261.62);
            }
        }
 
@@ -83,11 +91,18 @@ private:
     //-------OSC DATA INPUT SLIDER-----------------------------
         juce::Slider OSCdataSlider;
     //-------FREQ GENERATOR SLIDER------------------------------
-        juce::Slider frequencySlider;
-        double currentSampleRate = 0.0, currentAngle = 0.0, angleDelta = 0.0;
-        
-        juce::Slider fmSlider;
-        double currentSampleRate2 = 0.0, currentAngle2 = 0.0, angleDelta2 = 0.0;
+    SineWave mSineWavePlug;
+    SineWave fSineWavePlug;
+    
+    juce::Slider mSlider;
+    juce::Slider fSlider;
+    
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> mSliderAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> fSliderAttachment;
+    /* this will be our "parameter tree" */
+    std::unique_ptr<juce::AudioProcessorValueTreeState> mParameterState;
+    /*guarantees thread safe read and write access*/
+    std::array<std::atomic<float>*, TotalNumberParameters> mParameterValues;
     //------BUTTONS----------------------------------------------
         juce::TextButton M2Button, m3Button, M3Button, p4Button, p5Button, M6Button,
         M7Button, p8Button;

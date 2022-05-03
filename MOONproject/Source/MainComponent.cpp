@@ -177,7 +177,6 @@ void MainComponent::resized()
     
     //visualiser position-------------------
     visualiser.setColours(juce::Colour (255, 246, 223), juce::Colours::red); //background, waveform
-    //visualiser.setTransform(const juce::AffineTransform::rotation (1.5708).translated);
-    visualiser.setBounds(557, 150, 31, 370);
-    
+    visualiser.setBounds(388, 320, 370, 31);
+    visualiser.setTransform(juce::AffineTransform::rotation (1.5708, visualiser.getBounds().getCentreX(), visualiser.getBounds().getCentreY()));
 }
